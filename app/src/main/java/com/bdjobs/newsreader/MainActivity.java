@@ -56,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
             try {
                 Document document = Jsoup.connect(url).get();
                 Elements element = document.select("div[id=widget_50158]");
+                //Elements element = document.select("div[id=div_49675]");
+                System.out.println("Evan"+element.toString());
+
                 Elements title1 = element.select(".title");
 
                 title_1 = Html.fromHtml(title1.toString()).toString();
@@ -70,11 +73,8 @@ public class MainActivity extends AppCompatActivity {
                 Elements elements = elements1.select("img[itemprop=image]");
                 String sa= elements.toString();
                 a = sa.split("\"");
-
-                /*for(int i =0;i<a.length;i++)
-                System.out.println(a[i]+"\nPosition:"+String.valueOf(i));*/
-
-
+                for(int i =0;i<a.length;i++)
+                System.out.println(a[i]+"\nPosition:"+String.valueOf(i));
 
 
             } catch (IOException e) {
@@ -89,7 +89,22 @@ public class MainActivity extends AppCompatActivity {
 
             detailstxt.setText(details_1);
             txttitle.setText(title_1);
-            Glide.with(getApplicationContext()).load(a[13]).into(imageView);
+            if(a.length>12)
+            {
+                Glide.with(getApplicationContext()).load(a[13]).into(imageView);
+
+                /*if(null!=imageView.getDrawable())
+                {
+                    //imageview have image
+                }else{
+                    Glide.with(getApplicationContext()).load(a[11]).into(imageView);
+                }
+*/
+            }
+            else
+            {
+
+            }
             mProgressDialog.dismiss();
         }
     }
