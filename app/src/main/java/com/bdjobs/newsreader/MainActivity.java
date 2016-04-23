@@ -1,8 +1,11 @@
 package com.bdjobs.newsreader;
 
 import android.app.ProgressDialog;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -17,6 +20,7 @@ import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,8 +28,9 @@ public class MainActivity extends AppCompatActivity {
     TextView txttitle,detailstxt;
     String url = "http://www.prothom-alo.com/";
     ProgressDialog mProgressDialog;
-    String detailsLink1,title_1,details_1;
+    String detailsLink1,title_1,details_1,imageLink="";
     ImageView imageView;
+
     String a[];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,16 @@ public class MainActivity extends AppCompatActivity {
                 Document document = Jsoup.connect(url).get();
                 Elements element = document.select("div[id=widget_50158]");
                 //Elements element = document.select("div[id=div_49675]");
+                //Elements element = document.select("div[id=widget_50227]");
+                //Elements element = document.select("div[id=widget_49684]");
+                //Elements element = document.select("div[id=div_49678]");
+                //Elements element = document.select("div[id=div_1299]");
+                //Elements element = document.select("div[id=div_1778]");
+                //Elements element = document.select("div[id=widget_33045]");
+                //Elements element = document.select("div[id=widget_33057]");
+                //Elements element = document.select("div[id=div_43609]");
+                //Elements element = document.select("div[id=ticker_widget_47647]");
+                //Elements element = document.select("div[id=widget_48289]");
                 System.out.println("Evan"+element.toString());
 
                 Elements title1 = element.select(".title");
@@ -73,8 +88,17 @@ public class MainActivity extends AppCompatActivity {
                 Elements elements = elements1.select("img[itemprop=image]");
                 String sa= elements.toString();
                 a = sa.split("\"");
-                for(int i =0;i<a.length;i++)
-                System.out.println(a[i]+"\nPosition:"+String.valueOf(i));
+                for(int i =0;i<a.length;i++) {
+                    //Arrays.asList(a).contains("http:");
+                    //System.out.println(a[i] + "\nPosition:" + String.valueOf(i));
+                    int s = a[i].compareTo("http:");
+                    if(s>100)
+                    {
+                        imageLink=a[i];
+                    }
+
+                    //System.out.println(s +"***"+imageLink+ "\nPosition:" + String.valueOf(i));
+                }
 
 
             } catch (IOException e) {
@@ -89,22 +113,16 @@ public class MainActivity extends AppCompatActivity {
 
             detailstxt.setText(details_1);
             txttitle.setText(title_1);
-            if(a.length>12)
+            if(imageLink.matches("")||imageLink==null)
             {
-                Glide.with(getApplicationContext()).load(a[13]).into(imageView);
 
-                /*if(null!=imageView.getDrawable())
-                {
-                    //imageview have image
-                }else{
-                    Glide.with(getApplicationContext()).load(a[11]).into(imageView);
-                }
-*/
             }
             else
             {
-
+                Glide.with(getApplicationContext()).load(imageLink).into(imageView);
+                System.out.println("***"+imageLink);
             }
+
             mProgressDialog.dismiss();
         }
     }
@@ -121,4 +139,5 @@ public class MainActivity extends AppCompatActivity {
         String d = m.replaceAll("$1").toString();
         return d.replaceAll("\"", "");
     }
+
 }
